@@ -81,4 +81,4 @@ Y extrae los valores dentro de etiquetas con clases específicas:
 
 ## ✍️ Autor
 
-Hecho por pedido especial de un usuario de ChatGPT. ¡Gracias por la idea!
+Agustín Santiago Palau
