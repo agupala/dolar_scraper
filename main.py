@@ -9,23 +9,26 @@ def main() -> None:
     try:
         scraper = DolaritoScraper()
         rates = scraper.get_rates()
+        
+        line_length = 50
 
-        print("\n" + "═" * 40)
-        print("   COTIZACIONES DISPONIBLES   ".center(40))
-        print("═" * 40)
+        print("\n" + "═" * line_length)
+        print("   COTIZACIONES DISPONIBLES DEL DOLAR 💵    ".center(40))
+        print("═" * line_length)
 
         for name, rate in rates.items():
             print(f"- {name.upper()}:".ljust(12), end=" ")
             if rate.buy:
                 print(f"Compra: ${rate.buy:.2f}".ljust(15), end=" ")
+                print("|", end=" ")
             if rate.sell:
                 print(f"Venta: ${rate.sell:.2f}", end="")
             print()  # Salto de línea
 
-        print("═" * 40 + "\n")
+        print("═" * line_length + "\n")
 
-    except Exception as e:
-        print(f"\n⚠️ Error: {str(e)}")
+    except (ConnectionError, ValueError) as error:
+        print(f"\n⚠️ Error: {str(error)}")
 
 if __name__ == "__main__":
     main()
