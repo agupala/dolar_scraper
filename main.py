@@ -1,26 +1,40 @@
-"""Main module to demonstrate the functionality of the DolaritoScraper."""
-import logging
-import requests
-from dolar_scraper.scraper import DolaritoScraper
+"""Main module - Minimalist version"""
+from scraper.scraper import DolaritoScraper
+from scraper.config.logger import setup_logger
 
-# Configure logger
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s'
-)
-logger = logging.getLogger(__name__)
+logger = setup_logger()
 
-
-def main() -> None:
-    """Main function to demonstrate the scraper functionality."""
-    scraper = DolaritoScraper()
+def mostrar_cotizaciones() -> None:
+    """Function to display current dollar rates"""
+    logger.info("Fetching current dollar rates...")
     try:
-        rates = scraper.get_rates()
-        for rate in rates.values():
-            logger.info(rate)
-    except (requests.RequestException, ValueError) as error:
-        logger.error("Failed to get rates due to a network or parsing error: %s", error)
+        scraper = DolaritoScraper()
+        cotizaciones = scraper.get_rates()
 
+        print("\n" + "═"*40)
+        print("   COTIZACIONES ACTUALES   ".center(40))
+        print("═"*40)
 
-if __name__ == '__main__':
-    main()
+        # Oficial
+        print("\n • OFICIAL".ljust(12) +
+              f"Compra: ${cotizaciones['oficial'].buy:.2f}".ljust(20) +
+              f"Venta: ${cotizaciones['oficial'].sell:.2f}")
+
+        # Blue
+        print(" • BLUE".ljust(12) +
+              f"Compra: ${cotizaciones['blue'].buy:.2f}".ljust(20) +
+              f"Venta: ${cotizaciones['blue'].sell:.2f}")
+
+        # MEP (solo venta)
+        print(" • MEP".ljust(12) +
+              "".ljust(20) +
+              f"Venta: ${cotizaciones['mep'].sell:.2f}")
+
+        print("═"*40 + "\n")
+
+    except (KeyError, AttributeError) as error:
+        logger.error("Error displaying rates")
+        logger.error("%s: %s", type(error).__name__, error)
+
+if __name__ == "__main__":
+    mostrar_cotizaciones()
