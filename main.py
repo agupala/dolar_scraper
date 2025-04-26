@@ -4,37 +4,28 @@ from scraper.config.logger import setup_logger
 
 logger = setup_logger()
 
-def mostrar_cotizaciones() -> None:
-    """Function to display current dollar rates"""
-    logger.info("Fetching current dollar rates...")
+def main() -> None:
+    """Main function to run the scraper and display rates"""
     try:
         scraper = DolaritoScraper()
-        cotizaciones = scraper.get_rates()
+        rates = scraper.get_rates()
 
-        print("\n" + "═"*40)
-        print("   COTIZACIONES ACTUALES   ".center(40))
-        print("═"*40)
+        print("\n" + "═" * 40)
+        print("   COTIZACIONES DISPONIBLES   ".center(40))
+        print("═" * 40)
 
-        # Oficial
-        print("\n • OFICIAL".ljust(12) +
-              f"Compra: ${cotizaciones['oficial'].buy:.2f}".ljust(20) +
-              f"Venta: ${cotizaciones['oficial'].sell:.2f}")
+        for name, rate in rates.items():
+            print(f"- {name.upper()}:".ljust(12), end=" ")
+            if rate.buy:
+                print(f"Compra: ${rate.buy:.2f}".ljust(15), end=" ")
+            if rate.sell:
+                print(f"Venta: ${rate.sell:.2f}", end="")
+            print()  # Salto de línea
 
-        # Blue
-        print(" • BLUE".ljust(12) +
-              f"Compra: ${cotizaciones['blue'].buy:.2f}".ljust(20) +
-              f"Venta: ${cotizaciones['blue'].sell:.2f}")
+        print("═" * 40 + "\n")
 
-        # MEP (solo venta)
-        print(" • MEP".ljust(12) +
-              "".ljust(20) +
-              f"Venta: ${cotizaciones['mep'].sell:.2f}")
-
-        print("═"*40 + "\n")
-
-    except (KeyError, AttributeError) as error:
-        logger.error("Error displaying rates")
-        logger.error("%s: %s", type(error).__name__, error)
+    except Exception as e:
+        print(f"\n⚠️ Error: {str(e)}")
 
 if __name__ == "__main__":
-    mostrar_cotizaciones()
+    main()
