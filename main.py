@@ -9,7 +9,7 @@ def main() -> None:
     try:
         scraper = DolaritoScraper()
         rates = scraper.get_rates()
-        
+
         line_length = 50
 
         print("\n" + "═" * line_length)
@@ -28,7 +28,7 @@ def main() -> None:
         print("═" * line_length + "\n")
 
     except (ConnectionError, ValueError) as error:
-        print(f"\n⚠️ Error: {str(error)}")
+        logger.error("\n⚠️ Error: %s", str(error))
 
 if __name__ == "__main__":
     main()
